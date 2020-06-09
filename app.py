@@ -73,6 +73,8 @@ def index():
 def profile():
     return render_template('profile.html')
 
-@app.route('/thread')
-def thread():
-    return render_template('thread.html')
+@app.route('/thread/<thread_id>')
+def thread(thread_id):
+    thread = Thread.query.get(int(thread_id))
+
+    return render_template('thread.html', thread=thread)
