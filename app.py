@@ -4,7 +4,8 @@ from flask_migrate import Migrate
 from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin
 from flask_security.forms import RegisterForm
 from wtforms import StringField
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm 
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -39,16 +40,17 @@ class User(db.Model, UserMixin):
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
 
 class Thread(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(30))
     description = db.Column(db.String(200))
+    date_created = db.Column(db.DateTime())
 
 class ExtendRegisterForm(RegisterForm):
     name = StringField('Name')
     username = StringField('Username')
 
 class NewThread(FlaskForm):
-    name = StringField('Name')
+    title = StringField('Title')
     description = StringField('Description')
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -57,14 +59,15 @@ security = Security(app, user_datastore, register_form=ExtendRegisterForm)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     form = NewThread()
+
     if form.validate_on_submit():
-        new_thread = Thread(title = form.data.data, description = form.description.data)
+        new_thread = Thread(title=form.title.data, description=form.description.data, date_created=datetime.now())
         db.session.add(new_thread)
         db.session.commit()
 
     threads = Thread.query.all()
 
-    return render_template('index.html', form = form, threads = threads)
+    return render_template('index.html', form=form, threads=threads)
 
 @app.route('/profile')
 def profile():
@@ -72,6 +75,4 @@ def profile():
 
 @app.route('/thread')
 def thread():
-    
-
     return render_template('thread.html')

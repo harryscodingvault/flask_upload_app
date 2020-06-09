@@ -24,19 +24,20 @@
                     <div class="col-lg-4">Last Post</div>
                 </div>
             </div>
+            {% for thread in threads %}
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-4">
                         <h3 class="panel-title">
                             <a href="./thread.html" style="font-size: 18px;" class="blue">
-                                General Thread
+                                {{ thread.title }}
                             </a>
                         </h3>
                     </div>
                     <div class="col-lg-4">
                         <p>
                             <em>
-                                This thread is for sharing general information
+                                {{ thread.description }}
                             </em>
                         </p>
                     </div>
@@ -52,35 +53,7 @@
                     </div>
                 </div>
             </div>
-
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <h3 class="panel-title">
-                            <a href="./thread.html" style="font-size: 18px;" class="blue">
-                                Games Thread
-                            </a>
-                        </h3>
-                    </div>
-                    <div class="col-lg-4">
-                        <p>
-                            <em>
-                                This thread is for game related discussions
-                            </em>
-                        </p>
-                    </div>
-
-                    <div class="col-lg-4">
-                        <p>
-                            <i class="glyphicon glyphicon-calendar"></i> 
-                            26 June, 2017 &nbsp;
-                            <a href="./thread.html#_reply">
-                                <i class="glyphicon glyphicon-comment"></i> Reply
-                            </a>
-                        </p>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
@@ -93,14 +66,16 @@
                 <h4 class="modal-title">Add Thread</h4>
             </div>
             <div class="modal-body">
-                <form action="" method="POST" role="form">
-                
+                <form method="POST" role="form">
+                    {{ form.csrf_token }}
                     <div class="form-group">
                         <label for="name">Thread Name</label>
-                        <input type="text" name="name" id="name" class="form-control" placeholder="Enter thread name" required="required">
+                        {{ form.title(class="form-control", placeholder="Enter thread name") }}
                     </div>
-                
-                    
+
+                    <div class="form-group">
+                        {{ form.description(class="form-control", placeholder="Enter thread description") }}
+                    </div>
                 
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
