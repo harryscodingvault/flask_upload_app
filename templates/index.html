@@ -45,8 +45,8 @@
                     <div class="col-lg-4">
                         <p>
                             <i class="glyphicon glyphicon-calendar"></i> 
-                            26 June, 2017 &nbsp;
-                            <a href="./thread.html#_reply">
+                            {{ thread.last_post_date().strftime('%d %B, %Y') }} &nbsp;
+                            <a href="{{ url_for('thread', thread_id=thread.id) }}">
                                 <i class="glyphicon glyphicon-comment"></i> Reply
                             </a>
                         </p>

@@ -41,7 +41,7 @@
         <div class="col-lg-6">
             <div class="form-group">
                 {{ render_field(register_user_form.submit,  class="btn btn-primary") }}
-                <a href="./login.html" class="btn btn-link pull-right">
+                <a href="{{ url_for_security('login') }}" class="btn btn-link pull-right">
                     Go to Login <i class="glyphicon glyphicon-arrow-right"></i>
                 </a>
             </div>

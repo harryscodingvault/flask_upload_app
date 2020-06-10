@@ -18,14 +18,20 @@
                     
                     <div class="logo">
                         <div>
-                            <a href="./">Forum</a> 
+                            <a href="{{ url_for('index') }}">Forum</a> 
                             <span class="tagline">...cool community forum</span> 
                         </div>
                     </div>
                     <div class="menu">
-                        <a href="./index.html" class="m-item">Home</a> | 
-                        <a href="./profile.html" class="m-item">Profile</a> | 
+                        <a href="{{ url_for('index') }}" class="m-item">Home</a> | 
+                        {% if current_user.active %}
+                        <a href="{{ url_for('profile') }}" class="m-item">Profile</a> |  
                         <a href="{{ url_for_security('logout') }}" class="m-item">Logout</a>
+                        {% else %}
+                        <a href="{{ url_for_security('register') }}" class="m-item">Register</a> |
+                        <a href="{{ url_for_security('login') }}" class="m-item">Login</a>
+                        {% endif %}                  
+                        
                     </div>
 
                     {% block body %}{% endblock %}
