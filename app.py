@@ -1,112 +1,76 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, current_user, login_required
-from flask_security.forms import RegisterForm
-from wtforms import StringField, TextAreaField
-from flask_wtf import FlaskForm 
-from datetime import datetime
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager
+from flask_uploads import UploadSet, configure_uploads, IMAGES
+from wtforms import StringField, IntegerField, TextAreaField
+from flask_wtf.file import FileField, FileAllowed
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///forum.db'
+photos = UploadSet('photos', IMAGES)
+
+app.config['UPLOADED_PHOTOS_DEST'] = 'images'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///trendy.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = 'mysecret'
-app.config['SECURITY_REGISTERABLE'] = True
-app.config['SECURITY_PASSWORD_SALT'] = 'somesaltfortheforum'
-app.config['SECURITY_SEND_REGISTER_EMAIL'] = False
+
+configure_uploads(app, photos)
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-roles_users = db.Table('roles_users',
-    db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-    db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
 
-class Role(db.Model, RoleMixin):
+class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True)
-    description = db.Column(db.String(250))
+    name = db.Column(db.String(50), unique=True)
+    price = db.Column(db.Integer)
+    stock = db.Column(db.Integer)
+    description = db.Column(db.String(500))
+    image = db.Column(db.String(100))
 
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(255), unique=True)
-    password = db.Column(db.String(255))
-    name = db.Column(db.String(255))
-    username = db.Column(db.String(255), unique=True)
-    active = db.Column(db.Boolean())
-    confirmed_at = db.Column(db.DateTime())
-    roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
-    replies = db.relationship('Reply', backref='user', lazy='dynamic')
-
-class Thread(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(30))
-    description = db.Column(db.String(200))
-    date_created = db.Column(db.DateTime())
-
-    replies = db.relationship('Reply', backref='thread', lazy='dynamic')
-
-    def last_post_date(self):
-        last_reply = Reply.query.filter_by(thread_id=self.id).order_by(Reply.id.desc()).first()
-
-        if last_reply:
-            return last_reply.date_created
-
-        return self.date_created
-
-
-class Reply(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    thread_id = db.Column(db.Integer, db.ForeignKey('thread.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    message = db.Column(db.String(200))
-    date_created = db.Column(db.DateTime())
-
-class ExtendRegisterForm(RegisterForm):
+class AddProducts(FlaskForm):
     name = StringField('Name')
-    username = StringField('Username')
+    price = IntegerField('Price')
+    stock = IntegerField('Price')
+    description = TextAreaField('Description')
+    image = FileField('Image', validators = [FileAllowed(IMAGES, 'Only images are accepted')])
 
-class NewThread(FlaskForm):
-    title = StringField('Title')
-    description = StringField('Description')
-
-class NewReply(FlaskForm):
-    message = TextAreaField('Message')
-
-user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-security = Security(app, user_datastore, register_form=ExtendRegisterForm)
-
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
-    form = NewThread()
+    return render_template('index.html')
+
+@app.route('/product')
+def product():
+    return render_template('view-product.html')
+
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
+
+@app.route('/checkout')
+def checkout():
+    return render_template('checkout.html')
+
+@app.route('/admin')
+def admin():
+    return render_template('admin/index.html', admin=True)
+
+@app.route('/admin/add', methods=['GET', 'POST'])
+def add():
+    form = AddProduct()
 
     if form.validate_on_submit():
-        new_thread = Thread(title=form.title.data, description=form.description.data, date_created=datetime.now())
-        db.session.add(new_thread)
-        db.session.commit()
+        print(form.name.data)
 
-    threads = Thread.query.all()
+    return render_template('admin/add-product.html', admin=True, form=form)
 
-    return render_template('index.html', form=form, threads=threads, current_user=current_user)
+@app.route('/admin/order')
+def order():
+    return render_template('admin/view-order.html', admin=True)
 
-@app.route('/profile')
-@login_required
-def profile():
-    return render_template('profile.html', current_user=current_user)
-
-@app.route('/thread/<thread_id>', methods=['GET', 'POST'])
-def thread(thread_id):
-    form = NewReply()
-
-    thread = Thread.query.get(int(thread_id))
-
-    if form.validate_on_submit():
-        reply = Reply(user_id=current_user.id, message=form.message.data, date_created=datetime.now())
-        thread.replies.append(reply)
-        db.session.commit()
-
-    replies = Reply.query.filter_by(thread_id=thread_id).all()
-
-    return render_template('thread.html', thread=thread, form=form, replies=replies, current_user=current_user)
+if __name__ == '__main__':
+    manager.run()
