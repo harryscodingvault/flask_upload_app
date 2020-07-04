@@ -132,7 +132,7 @@ def photo_upload(album_id):
             db.session.add(new_photo)
             db.session.commit()
     
-    photos = Photo.query.all()
+    photos = Photo.query.filter_by(album_id=album_id).all()
     return render_template('upload.html', photos=photos, album_id = album_id)
 
 @app.route('/photo_upload/<filename>')

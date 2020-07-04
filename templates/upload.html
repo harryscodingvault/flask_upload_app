@@ -13,7 +13,7 @@
         <hr/>
         <div>
 
-            <form action="photo_upload" method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data">
                 <input type="file" multiple="" name="file[]" class="span3" /><br />
                 <input type="submit" value="Upload" class="span2">
             </form>
@@ -27,9 +27,9 @@
         <div>
             This is a list of the files you just uploaded, click on them to load/download them
             <ul>
-                {% for photo in photos %} {% if photo_upload == photos.album_id %}
-                <li>{{photo}}</li>
-                {% endif %} {% endfor %}
+                {% for photo in photos %}
+                <li>{{photo.album_id}}-------------{{photo.image}}</li>
+                {% endfor %}
             </ul>
         </div>
         <div class="header">
