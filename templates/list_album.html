@@ -22,7 +22,7 @@
 
     <ol>
         {% for album in albums %}
-        <li>{{album.name}}</li>
+        <li><a href="{{url_for('uploaded_file', filename=album.id)}}">{{album.name}}</a></li>
         {% endfor %}
 
     </ol>

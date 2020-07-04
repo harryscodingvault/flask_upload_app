@@ -117,12 +117,8 @@ def logout():
     logout_user()
     return render_template('index.html')
 
-@app.route('/get_pic')
-def get_pic():
-    return render_template('get_pic.html')
-
-@app.route('/photo_upload', methods=['GET','POST'])
-def photo_upload():
+@app.route('/photo_upload/<album_id>', methods=['GET','POST'])
+def photo_upload(album_id):
     uploaded_files = request.files.getlist("file[]")
     filenames = []
     for file in uploaded_files:
@@ -132,10 +128,12 @@ def photo_upload():
             filenames.append(filename)
             file_url = os.path.join(app.config['UPLOADED_PHOTOS_DEST'], filename)
             #Database
-            new_photo  = Photo(image=file_url)
+            new_photo  = Photo(image=file_url, album_id= album_id)
             db.session.add(new_photo)
             db.session.commit()
-    return render_template('upload.html', filenames=filenames)
+    
+    photos = Photo.query.all()
+    return render_template('upload.html', photos=photos, album_id = album_id)
 
 @app.route('/photo_upload/<filename>')
 def uploaded_file(filename):
