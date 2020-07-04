@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h2>An ordered album list</h2>
+    <form action="{{url_for('album_menu')}}" method="POST">
+        {{form.csrf_token}}
+
+        <div class="form-group">
+            {{form.album_name(class="form-control", placeholder="Enter a new album")}}
+            <ul>
+                {% for error in form.album_name.errors %}
+                <li style="color: red;">{{ error }}</li>
+                {% endfor %}
+            </ul>
+
+        </div>
+
+        <button type="submit" class="registerbtn">Register</button>
+    </form>
+
+    <ol>
+        {% for album in albums %}
+        <li>{{album.name}}</li>
+        {% endfor %}
+
+    </ol>
+
+</body>
+
+</html>
