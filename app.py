@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 photos = UploadSet('photos', IMAGES)
 
-app.config['UPLOADED_PHOTOS_DEST'] = 'uploads'
+app.config['UPLOADED_PHOTOS_DEST'] = 'static/uploads'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///my_photos.db'
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = 'mysecret'
@@ -127,6 +127,7 @@ def photo_upload(album_id):
             file.save(os.path.join(app.config['UPLOADED_PHOTOS_DEST'], filename))
             filenames.append(filename)
             file_url = os.path.join(app.config['UPLOADED_PHOTOS_DEST'], filename)
+            file_url = '..\\' + file_url
             #Database
             new_photo  = Photo(image=file_url, album_id= album_id)
             db.session.add(new_photo)
@@ -150,10 +151,16 @@ def album_menu():
         return redirect(url_for('album_menu'))
     
     albums = Album.query.all()
+    photos = Photo.query.all()
 
-    return render_template('list_album.html', form = form, albums=albums)
+    return render_template('list_album.html', form = form, albums=albums, photos=photos)
 
+@app.route('/my_albums', methods=['GET', 'POST'])
+def my_albums():
+    albums = Album.query.all()
+    photos = Photo.query.all()
 
+    return render_template('my_albums.html', photos = photos, albums=albums)
 
 if __name__ == '__main__':
     manager.run()
