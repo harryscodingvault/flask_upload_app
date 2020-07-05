@@ -137,7 +137,7 @@ def photo_upload(album_id):
 
 @app.route('/photo_upload/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'],filename)
+    return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'], filename)
     
 
 @app.route('/album_menu', methods=['GET', 'POST'])
