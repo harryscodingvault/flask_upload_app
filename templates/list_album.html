@@ -23,7 +23,7 @@
     <ol>
         {% for album in albums %}
         <li>
-            <a href="{{url_for('uploaded_file', filename=album.id)}}">{{album.id}}--------{{album.name}}</a>
+            <a href="{{url_for('uploaded_file', album_id=album.id)}}">{{album.id}}--------{{album.name}}</a>
         </li>
         {% for photo in photos if photo.album_id== album.id %}
         <li>-------{{photo.album_id}}-----{{photo.image}}</li>
