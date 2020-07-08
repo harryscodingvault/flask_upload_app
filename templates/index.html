@@ -1,82 +1,78 @@
 <!DOCTYPE html>
 <html>
-<title>W3.CSS Template</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-    body,
-    h1 {
-        font-family: "Raleway", Arial, sans-serif
-    }
-    
-    h1 {
-        letter-spacing: 6px
-    }
-    
-    .w3-row-padding img {
-        margin-bottom: 12px
-    }
-</style>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Harold's site</title>
+    <meta content="Harold's portfolio" name="description" property="og:description">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="static/styles/main.css" rel="stylesheet">
+
+</head>
 
 <body>
+    <section class="intro">
 
-    <!-- !PAGE CONTENT! -->
-    <div class="w3-content" style="max-width:1500px">
-
-        <!-- Header -->
-        <header class="w3-panel w3-center w3-opacity" style="padding:128px 16px">
-            <h1 class="w3-xlarge">PHOTOGRAPHER</h1>
-            <h1>John Doe</h1>
-
-            <div class="w3-padding-32">
-                <div class="w3-bar w3-border">
-                    <a href="#" class="w3-bar-item w3-button">Home</a>
-                    <a href="#" class="w3-bar-item w3-button w3-light-grey">Portfolio</a>
-                    <a href="#" class="w3-bar-item w3-button">Contact</a>
-                    <a href="#" class="w3-bar-item w3-button w3-hide-small">Weddings</a>
-                </div>
-            </div>
-        </header>
-
-        <!-- Photo Grid -->
-        <div class="w3-row-padding w3-grayscale" style="margin-bottom:128px">
-            <div class="w3-half">
-                <img src="/w3images/wedding.jpg" style="width:100%">
-                <img src="/w3images/rocks.jpg" style="width:100%">
-                <img src="/w3images/falls2.jpg" style="width:100%">
-                <img src="/w3images/paris.jpg" style="width:100%">
-                <img src="/w3images/nature.jpg" style="width:100%">
-                <img src="/w3images/mist.jpg" style="width:100%">
-                <img src="/w3images/paris.jpg" style="width:100%">
-            </div>
-
-            <div class="w3-half">
-                <img src="/w3images/underwater.jpg" style="width:100%">
-                <img src="/w3images/ocean.jpg" style="width:100%">
-                <img src="/w3images/wedding.jpg" style="width:100%">
-                <img src="/w3images/mountainskies.jpg" style="width:100%">
-                <img src="/w3images/rocks.jpg" style="width:100%">
-                <img src="/w3images/underwater.jpg" style="width:100%">
+        <div class="intro-text">
+            <div class="welcome">
+                <h1>Hello visitor, I am <span>Harold</span>, a <span>Full-Stack Python Developer</span> from <span>Phoenix, AZ</span></h1>
             </div>
         </div>
 
-        <!-- End Page Content -->
-    </div>
 
-    <!-- Footer -->
-    <footer class="w3-container w3-padding-64 w3-light-grey w3-center w3-large">
-        <i class="fa fa-facebook-official w3-hover-opacity"></i>
-        <i class="fa fa-instagram w3-hover-opacity"></i>
-        <i class="fa fa-snapchat w3-hover-opacity"></i>
-        <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-        <i class="fa fa-twitter w3-hover-opacity"></i>
-        <i class="fa fa-linkedin w3-hover-opacity"></i>
-        <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+
+    </section>
+
+    <section class="fixed-nav-bar">
+        <nav>
+            <div id="navigation-bar">
+                <ul>
+                    <li><a href="#projects"><i ></i><span>Projects</span></a></li>
+                    <li><a href="#skill"><i ></i><span>Skills</span></a></li>
+                    <li><a href="#identity"><i ></i><span>About</span></a></li>
+                </ul>
+            </div>
+        </nav>
+    </section>
+
+    <section class="projects" id="projects">
+        <div class="projects-collage">
+
+            {% for album in albums %}
+            <a class="project-item" href="https://www.github.com/jabedford" target="_blank">
+                <figure class="project-figure">
+
+                    {% for photo in photos if photo.album_id== album.id %}
+                    <img src="{{photo.image}}"> {% endfor %}
+                </figure>
+            </a>
+            {% endfor %}
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="wrapper">
+            <ul>
+                <li>
+                    <a class="fa fa-github-square " href="https://github.com/EvilRobot01" target="_blank"></a>
+                </li>
+                <li>
+                    <a class="fa fa-twitter-square" href="https://twitter.com/harold_bothead" target="_blank"></a>
+                </li>
+                <li>
+                    <a class="fa fa-linkedin-square " href="https://www.linkedin.com/in/harolddf/" target="_blank"></a>
+                </li>
+                <li>
+                    <a class="fa fa-envelope" href="mailto:fullstackbot@hotmail.com" target="_blank"></a>
+                </li>
+            </ul>
+        </div>
     </footer>
-
 </body>
 
 </html>

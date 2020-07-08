@@ -6,6 +6,8 @@ from flask import render_template, redirect, url_for, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user, logout_user
 from werkzeug import secure_filename
+from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
+
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -14,7 +16,9 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    photos = Photo.query.all()
+    albums = Album.query.all()
+    return render_template('index.html', photos = photos, albums=albums)
 
 @app.route('/profile')
 @login_required
@@ -80,12 +84,23 @@ def photo_upload(album_id):
 
 @app.route('/photo_upload/<album_id>')
 def uploaded_file(album_id):
-    return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'], album_id)
+    return render_template('upload.html', photos=photos, album_id = album_id)
+
+@app.route('/delete_photo/<album_id>/<photo_id>')
+def delete_photo(photo_id, album_id):
+    item_to_delete = Photo.query.get_or_404(photo_id)
     
+    try:
+        db.session.delete(item_to_delete)
+        db.session.commit()
+        return redirect(f'/photo_upload/{album_id}')
+    except:
+        return 'There was a problem deleting that task'
 
 @app.route('/album_menu', methods=['GET', 'POST'])
 def album_menu():
     form = RegisterAlbumForm()
+    
     if form.validate_on_submit():
         new_album = Album(name = form.album_name.data)
         db.session.add(new_album)
@@ -97,9 +112,13 @@ def album_menu():
 
     return render_template('list_album.html', form = form, albums=albums, photos=photos)
 
-@app.route('/my_albums', methods=['GET', 'POST'])
-def my_albums():
-    albums = Album.query.all()
-    photos = Photo.query.all()
+@app.route('/delete_album/<album_id>')
+def delete_album(album_id):
+    album_to_delete = Album.query.get_or_404(album_id)
+    try:
+        db.session.delete(album_to_delete)
+        db.session.commit()
+        return redirect('/album_menu')
+    except:
+        return 'There was a problem deleting that task'
 
-    return render_template('my_albums.html', photos = photos, albums=albums)

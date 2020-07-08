@@ -28,10 +28,12 @@
             This is a list of the files you just uploaded, click on them to load/download them
             <ul>
                 {% for photo in photos %}
-                <li>{{photo.album_id}}-------------{{photo.image}}</li>
+                <li>{{photo.album_id}}-------------{{photo.image}}---{{photo.id}}
+                </li>
+                <a href="/delete_photo/{{photo.album_id}}/{{photo.id}}">Delete</a>
                 <img src="{{photo.image}}" alt="Robot Image" width="460" height="345"> {% endfor %}
             </ul>
-            <img src="..\uploads\robot_3.jpg" alt="Robot Image">
+
         </div>
         <div class="header">
             <h3 class="text-muted">Code to manage a Upload</h3>
@@ -39,9 +41,7 @@
         <hr/>
     </div>
     </div>
-    {% for photo in photos %}
 
-    <img src="{{photo.image}}" alt="Robot Image" width="460" height="345"> {% endfor %}
 </body>
 
 </html>
