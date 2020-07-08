@@ -1,47 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %} {% block style %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/upload.css') }}"> {% endblock %} {% block top %}
+<form method="post" enctype="multipart/form-data">
 
-<head>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-</head>
+    <input type="file" multiple="" name="file[]" class="span3" />
+    <input type="submit" value="Upload" class="span2">
+</form>
 
-<body>
-    <div class="container">
-        <div class="header">
-            <h3 class="text-muted">How To Upload a File</h3>
-        </div>
-        <hr/>
-        <div>
 
-            <form method="post" enctype="multipart/form-data">
-                <input type="file" multiple="" name="file[]" class="span3" /><br />
-                <input type="submit" value="Upload" class="span2">
-            </form>
-        </div>
+
+{% endblock %} {% block body %}
+<div class="row">
+
+
+    {% for photo in photos %}
+    <div class="column">
+        <h2>{{photo.image}}</h2>
+        <h2><a href="/delete_photo/{{photo.album_id}}/{{photo.id}}" style="color: red;">Delete</a></h2>
+        <img src="{{photo.image}}" alt="Robot Image" width="460" height="345">
     </div>
-    <div class="container">
-        <div class="header">
-            <h3 class="text-muted">Uploaded files</h3>
-        </div>
-        <hr/>
-        <div>
-            This is a list of the files you just uploaded, click on them to load/download them
-            <ul>
-                {% for photo in photos %}
-                <li>{{photo.album_id}}-------------{{photo.image}}---{{photo.id}}
-                </li>
-                <a href="/delete_photo/{{photo.album_id}}/{{photo.id}}">Delete</a>
-                <img src="{{photo.image}}" alt="Robot Image" width="460" height="345"> {% endfor %}
-            </ul>
+    {% endfor %}
 
-        </div>
-        <div class="header">
-            <h3 class="text-muted">Code to manage a Upload</h3>
-        </div>
-        <hr/>
-    </div>
-    </div>
+</div>
 
-</body>
 
-</html>
+{% endblock %}

@@ -1,15 +1,16 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %} {% block top %} {% block style %} {% endblock %}
 
-<body>
 
-    <h2>Alternative text</h2>
+<form method="post" enctype="multipart/form-data">
+    <input type="file" multiple="" name="file[]" class="span3" /><br />
+    <input type="submit" value="Upload" class="span2">
+</form>
 
-    <p>The alt attribute should reflect the image content, so users who cannot see the image gets an understanding of what the image contains:</p>
+{% endblock %} {% block body %} {% for photo in photos %}
+<li>{{photo.album_id}}-------------{{photo.image}}---{{photo.id}}
+</li>
+<a href="/delete_photo/{{photo.album_id}}/{{photo.id}}">Delete</a>
+<img src="{{photo.image}}" alt="Robot Image" width="460" height="345"> {% endfor %}
+</ul>
 
-    <img src="..\uploads\robot_.jpg" alt="Flowers in Chania">
-    <img src="..\uploads\robot_.jpg" alt="Robot Image" width="460" height="345">
-
-</body>
-
-</html>
+{% endblock %}

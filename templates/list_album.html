@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block style %}
 <link href="static/styles/album.css" rel="stylesheet"> {% endblock %} {% block top %}
-<h2>An ordered album list</h2>
+
 <form action="{{url_for('album_menu')}}" method="POST">
     {{form.csrf_token}}
 
@@ -18,9 +18,15 @@
 </form>
 {% endblock %} {% block body %} {% for album in albums %}
 <div class="row">
-    <h1><a href="{{url_for('uploaded_file', album_id=album.id)}}">{{album.id}}--------{{album.name}}</a><a href="/delete_album/{{album.id}}">Delete</a></h1>
-    <h2></h2> {% for photo in photos if photo.album_id== album.id %}
+    <h1><a href="{{url_for('uploaded_file', album_id=album.id)}}">{{album.name}}</a></h1>
+    <h2><a href="/delete_album/{{album.id}}" style="color: red;">Delete</a></h2>
+
+
+    {% for photo in photos if photo.album_id== album.id %}
     <div class="column">
-        <img src="{{photo.image}}" alt="" onclick="myFunction(this);">
+        <img src="{{photo.image}}" alt="Robot Image">
     </div>
-    {% endfor %} </div> {% endfor %} {% endblock %}
+    {% endfor %}
+
+</div>
+{% endfor %} {% endblock %}

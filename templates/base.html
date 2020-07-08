@@ -10,7 +10,7 @@
     <meta content="Andy's portfolio" name="description" property="og:description">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="static/styles/main.css" rel="stylesheet"> {% block style %} {% endblock %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}"> {% block style %} {% endblock %}
 
 </head>
 
@@ -21,9 +21,9 @@
         <nav>
             <div id="navigation-bar">
                 <ul>
-                    <li><a href="#projects"><i ></i><span>Albums</span></a></li>
-                    <li><a href="#projects"><i ></i><span>About me</span></a></li>
-                    <li><a href="#projects"><i ></i><span>Contact me</span></a></li>
+                    <li><a href="/album_menu"><i ></i><span>Albums</span></a></li>
+                    <li><a href="/"><i ></i><span>Main page</span></a></li>
+                    <li><a href="/logout"><i ></i><span>Logout</span></a></li>
                 </ul>
             </div>
         </nav>

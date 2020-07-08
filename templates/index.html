@@ -13,13 +13,13 @@
 
         {% for album in albums %}
         <a class="project-item" href="/photo_upload/{{album.id}}" target="_blank">
-            <figure class="project-figure">
+            
 
                 {% for photo in photos if photo.album_id== album.id %}
-                <img src="{{photo.image}}"> {% endfor %}
-            </figure>
-        </a>
-        {% endfor %}
+                <figure class="project-figure">
+                <img src="{{photo.image}}"> </figure>{% endfor %}
+            
+        </a> {% endfor %}
 
     </div>
 </section>
