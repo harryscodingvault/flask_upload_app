@@ -1,78 +1,26 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %} {% block top %}
+<section class="intro">
 
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Harold's site</title>
-    <meta content="Harold's portfolio" name="description" property="og:description">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="static/styles/main.css" rel="stylesheet">
-
-</head>
-
-<body>
-    <section class="intro">
-
-        <div class="intro-text">
-            <div class="welcome">
-                <h1>Hello visitor, I am <span>Harold</span>, a <span>Full-Stack Python Developer</span> from <span>Phoenix, AZ</span></h1>
-            </div>
+    <div class="intro-text">
+        <div class="welcome">
+            <h1>Hello visitor, I am <span>Harold</span>, a <span>Full-Stack Python Developer</span> from <span>Phoenix, AZ</span></h1>
         </div>
+    </div>
+</section>
+{% endblock %} {% block body %}
+<section class="projects" id="projects">
+    <div class="projects-collage">
 
+        {% for album in albums %}
+        <a class="project-item" href="/photo_upload/{{album.id}}" target="_blank">
+            <figure class="project-figure">
 
+                {% for photo in photos if photo.album_id== album.id %}
+                <img src="{{photo.image}}"> {% endfor %}
+            </figure>
+        </a>
+        {% endfor %}
 
-    </section>
-
-    <section class="fixed-nav-bar">
-        <nav>
-            <div id="navigation-bar">
-                <ul>
-                    <li><a href="#projects"><i ></i><span>Projects</span></a></li>
-                    <li><a href="#skill"><i ></i><span>Skills</span></a></li>
-                    <li><a href="#identity"><i ></i><span>About</span></a></li>
-                </ul>
-            </div>
-        </nav>
-    </section>
-
-    <section class="projects" id="projects">
-        <div class="projects-collage">
-
-            {% for album in albums %}
-            <a class="project-item" href="https://www.github.com/jabedford" target="_blank">
-                <figure class="project-figure">
-
-                    {% for photo in photos if photo.album_id== album.id %}
-                    <img src="{{photo.image}}"> {% endfor %}
-                </figure>
-            </a>
-            {% endfor %}
-
-        </div>
-    </section>
-
-    <footer>
-        <div class="wrapper">
-            <ul>
-                <li>
-                    <a class="fa fa-github-square " href="https://github.com/EvilRobot01" target="_blank"></a>
-                </li>
-                <li>
-                    <a class="fa fa-twitter-square" href="https://twitter.com/harold_bothead" target="_blank"></a>
-                </li>
-                <li>
-                    <a class="fa fa-linkedin-square " href="https://www.linkedin.com/in/harolddf/" target="_blank"></a>
-                </li>
-                <li>
-                    <a class="fa fa-envelope" href="mailto:fullstackbot@hotmail.com" target="_blank"></a>
-                </li>
-            </ul>
-        </div>
-    </footer>
-</body>
-
-</html>
+    </div>
+</section>
+{% endblock %}

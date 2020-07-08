@@ -8,7 +8,6 @@ from flask_login import login_required, current_user, logout_user
 from werkzeug import secure_filename
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 
-
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 def allowed_file(filename):

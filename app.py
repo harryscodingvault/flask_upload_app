@@ -18,23 +18,15 @@ app.config['SECRET_KEY'] = 'mysecret'
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
-
-
 configure_uploads(app, photos)
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-
-
 from views import *
-
-
 
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
-
-
 
 if __name__ == '__main__':
     manager.run()

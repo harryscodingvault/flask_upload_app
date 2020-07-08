@@ -1,38 +1,26 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %} {% block style %}
+<link href="static/styles/album.css" rel="stylesheet"> {% endblock %} {% block top %}
+<h2>An ordered album list</h2>
+<form action="{{url_for('album_menu')}}" method="POST">
+    {{form.csrf_token}}
 
-<body>
+    <div class="form-group">
+        {{form.album_name(class="form-control", placeholder="Enter a new album")}}
+        <ul>
+            {% for error in form.album_name.errors %}
+            <li style="color: red;">{{ error }}</li>
+            {% endfor %}
+        </ul>
 
-    <h2>An ordered album list</h2>
-    <form action="{{url_for('album_menu')}}" method="POST">
-        {{form.csrf_token}}
+    </div>
 
-        <div class="form-group">
-            {{form.album_name(class="form-control", placeholder="Enter a new album")}}
-            <ul>
-                {% for error in form.album_name.errors %}
-                <li style="color: red;">{{ error }}</li>
-                {% endfor %}
-            </ul>
-
-        </div>
-
-        <button type="submit" name='submit' class="registerbtn" value="register">Register</button>
-    </form>
-
-    <ol>
-        {% for album in albums %}
-        <li>
-            <a href="{{url_for('uploaded_file', album_id=album.id)}}">{{album.id}}--------{{album.name}}</a>
-            <a href="/delete_album/{{album.id}}">Delete</a>
-        </li>
-        {% for photo in photos if photo.album_id== album.id %}
-        <li>-------{{photo.album_id}}-----{{photo.image}}</li>
-        <li><img src="{{photo.image}}" alt="Robot Image" width="100" height="100"></li>
-        {% endfor %} {% endfor %}
-
-    </ol>
-
-</body>
-
-</html>
+    <button type="submit" name='submit' class="registerbtn" value="register">Register</button>
+</form>
+{% endblock %} {% block body %} {% for album in albums %}
+<div class="row">
+    <h1><a href="{{url_for('uploaded_file', album_id=album.id)}}">{{album.id}}--------{{album.name}}</a><a href="/delete_album/{{album.id}}">Delete</a></h1>
+    <h2></h2> {% for photo in photos if photo.album_id== album.id %}
+    <div class="column">
+        <img src="{{photo.image}}" alt="" onclick="myFunction(this);">
+    </div>
+    {% endfor %} </div> {% endfor %} {% endblock %}
